@@ -49,7 +49,7 @@
 <body>
   <!--
   [Done]
-  Feature 1
+  Feature 1)
   In order to see how BDD syntax is being used on twitter
   As a BDD zealot
   I want to see tweets that contain 'given', 'when' & 'then', in that order.
@@ -79,6 +79,10 @@
   Given a date for a tweet
   When it is printed to the screen
   Then the format should be similar to twitter's (5 mins ago)
+
+  Given a search returns a tweet that spans multiple lines
+  When the user views the page
+  Then the tweet should be included in the list
   
   [Done]
   Feature 2)
@@ -137,10 +141,10 @@
         var count = 0;
         for (var i in data.results) {
           var tweet = data.results[i];
-          if (tweet.text.match(/given.*when.*then/i)) {
-            tweetPrinter.print(tweet);
-            if (++count >= 10) {
-              break;
+	  var tweetText = tweet.text.replace(/\n/g, " ");
+          if (tweetText.match(/given.*when.*then/i)) {
+            if (++count <= 10) {
+              tweetPrinter.print(tweet);
             }
           }
         }
