@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+  <title>A Behavioural World</title>
+  <style type="text/css">
+    body {
+      background-color: #369;
+      font-family: sans-serif;
+      font-size: 1.2em;
+    }
+    body,
+    a {
+      color: white;
+    }
+    #page {
+      margin: 0 auto;
+      width: 600px;
+    }
+    ol#tweets {
+      list-style: none;
+      padding: 0;
+    }
+    #tweets img {
+      border: 1px solid white;
+      float: right;
+      height: 48px;
+      width: 48px;
+    }
+    .user {
+      margin-right: 2ex;
+    }
+    #tweets div {
+      margin-right: 60px;
+    }
+    #tweets li {
+      margin-bottom: 1em;
+    }
+    .given,
+    .when,
+    .then {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <!--
+  [Done]
+  Feature 1
+  In order to see how BDD syntax is being used on twitter
+  As a BDD zealot
+  I want to see tweets that contain 'given', 'when' & 'then', in that order.
+  
+  Scenarios:
+  [Done]
+  Given the search returns more than matching 10 tweets
+  When the user views the page
+  Then the 10 most recent tweets 
+  
+  [Done]
+  Given the search returns less than matching 10 tweets
+  When the user views the page
+  Then all returned tweets should be shown
+  
+  [May never occur, ignoring for now]
+  Given the search returns no matching tweets
+  When the user views the page
+  Then instead of showing any tweets a message should be shown
+  
+  [Done]
+  Given a tweet
+  When it is printed to the screen
+  Then the user's profile pic, name, tweet text, date/time should be shown
+  
+  [Done]
+  Given a date for a tweet
+  When it is printed to the screen
+  Then the format should be similar to twitter's (5 mins ago)
+  
+  [Done]
+  Feature 2)
+  In order to see more about a BDD twitter user
+  When a tweet is displayed
+  I want to be able to click through to the user on twitter 
+  
+  Scenarios:
+  [Done]
+  Given a displayed tweet
+  When it is printed to the screen
+  Then the username & profile picuture should link to the user's twitter profile
+  
+  [Done]
+  Given a displayed tweet
+  When a user clicks on the date
+  Then the user should be taken to the individual tweet page on twitter.
+  
+  Feature 3)
+  In order to emphasis the given/when/then syntax
+  As a BDD zealot
+  I want to see give/when/then highlighted in the displayed tweets (orange would be nice)
+  
+  Feature 4)
+  In order to encourage BDD syntax usage on twitter
+  As a BDD zealot
+  I want to be able to tweet from this page using a BDD template
+  
+  -->
+  <div id="page">
+    <h1>A Behavioural World</h1>
+    <ol id="tweets"></ol>
+  </div>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.timeago.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      var tweetPrinter = {
+        print: function(tweet) {
+          var profileUrl = 'http://twitter.com/' + tweet.from_user;
+          $('#tweets').append(
+            $('<li>')
+            .append($('<a href="' + profileUrl + '"/>')
+              .append($('<img src="' + tweet.profile_image_url + '" alt=""/>')))
+            .append($('<div/>')
+              .append($('<a href="' + profileUrl + '" class="user"/>').text(tweet.from_user))
+              .append($('<span class="text"/>').text(tweet.text)))
+            .append($('<div/>')
+              .append($('<a href="' + profileUrl + '/status/' + tweet.id + '" class="time"/>')
+                .text($.timeago(new Date(tweet.created_at)))))
+          );
+        },
+      };
+    
+      $.getJSON('http://search.twitter.com/search.json?callback=?&q=given+when+then&rpp=100', function(data) {
+        var count = 0;
+        for (var i in data.results) {
+          var tweet = data.results[i];
+          if (tweet.text.match(/given.*when.*then/i)) {
+            tweetPrinter.print(tweet);
+            if (++count >= 10) {
+              break;
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
