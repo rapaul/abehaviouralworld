@@ -70,12 +70,12 @@
   
   Scenarios:
   [Done]
-  Given the search returns more than matching 10 tweets
+  Given the search returns more than matching 20 tweets
   When the user views the page
-  Then the 10 most recent tweets 
+  Then the 20 most recent tweets 
   
   [Done]
-  Given the search returns less than matching 10 tweets
+  Given the search returns less than matching 20 tweets
   When the user views the page
   Then all returned tweets should be shown
   
@@ -173,7 +173,7 @@
           var tweet = data.results[i];
           var tweetText = tweet.text.replace(/\n/g, " ");
           if (tweetText.match(/given.*when.*then/i)) {
-            if (++count <= 10) {
+            if (++count <= 20) {
               tweetPrinter.print(tweet);
             }
           }
